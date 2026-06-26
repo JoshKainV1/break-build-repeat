@@ -1,0 +1,71 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Josh Kain — breaking things, building things, repeating." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | break.build.repeat</title>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col">
+    <Nav />
+    <main class="flex-1 pt-16">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Keyboard shortcuts: G+H home, G+P projects, G+A about, G+C contact -->
+    <div id="shortcut-toast" class="fixed bottom-6 right-6 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 font-mono text-xs text-zinc-300 opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+      <span id="shortcut-text"></span>
+    </div>
+
+    <script>
+      let firstKey = '';
+      let timer: ReturnType<typeof setTimeout>;
+      const toast = document.getElementById('shortcut-toast');
+      const toastText = document.getElementById('shortcut-text');
+
+      const routes: Record<string, string> = {
+        h: '/', p: '/projects', a: '/about', c: '/contact',
+      };
+
+      const showToast = (msg: string) => {
+        if (!toast || !toastText) return;
+        toastText.textContent = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 1500);
+      };
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.target as HTMLElement).tagName === 'INPUT') return;
+        const key = e.key.toLowerCase();
+
+        if (key === 'g') {
+          firstKey = 'g';
+          showToast('g — then h/p/a/c to navigate');
+          timer = setTimeout(() => { firstKey = ''; }, 2000);
+          return;
+        }
+
+        if (firstKey === 'g' && routes[key]) {
+          clearTimeout(timer);
+          firstKey = '';
+          window.location.href = routes[key];
+        }
+      });
+    </script>
+  </body>
+</html>

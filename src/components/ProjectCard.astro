@@ -1,0 +1,51 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  href?: string;
+  external?: boolean;
+  status?: 'live' | 'wip' | 'broken';
+}
+
+const { title, description, tags, href, external = true, status = 'wip' } = Astro.props;
+
+const statusStyles = {
+  live: 'bg-green-900 text-green-300',
+  wip: 'bg-yellow-900 text-yellow-300',
+  broken: 'bg-red-900 text-red-300',
+};
+
+const statusLabel = {
+  live: 'Live',
+  wip: 'In progress',
+  broken: 'Gloriously broken',
+};
+---
+
+<div class="group relative border border-zinc-800 rounded-lg p-6 transition-all duration-300 hover:border-zinc-500 hover:shadow-[0_0_30px_-5px_rgba(161,161,170,0.15)] hover:-translate-y-0.5">
+  <div class="flex items-start justify-between mb-3">
+    <h3 class="font-semibold text-zinc-100">{title}</h3>
+    <span class={`text-xs px-2 py-0.5 rounded font-mono ${statusStyles[status]}`}>
+      {statusLabel[status]}
+    </span>
+  </div>
+  <p class="text-zinc-400 text-sm mb-4">{description}</p>
+  <div class="flex items-center justify-between">
+    <div class="flex gap-2 flex-wrap">
+      {tags.map(tag => (
+        <span class="text-xs font-mono text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded">{tag}</span>
+      ))}
+    </div>
+    {href && (
+      <a
+        href={href}
+        target={external ? '_blank' : '_self'}
+        rel={external ? 'noopener noreferrer' : undefined}
+        class="text-xs text-zinc-400 hover:text-zinc-100 transition-colors ml-4 shrink-0"
+      >
+        {external ? 'View →' : 'Read more →'}
+      </a>
+    )}
+  </div>
+</div>

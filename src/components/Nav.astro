@@ -1,0 +1,45 @@
+---
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const current = Astro.url.pathname;
+---
+
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300">
+  <div class="max-w-4xl mx-auto flex items-center justify-between">
+    <a href="/" class="font-mono text-sm font-bold tracking-widest text-zinc-100">
+      break.build.repeat
+    </a>
+    <ul class="flex gap-6">
+      {links.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class={`text-sm transition-colors hover:text-white ${current === link.href ? 'text-white' : 'text-zinc-400'}`}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById('main-nav');
+
+  const update = () => {
+    if (window.scrollY > 20) {
+      nav?.classList.add('bg-zinc-950/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800');
+    } else {
+      nav?.classList.remove('bg-zinc-950/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800');
+    }
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+</script>

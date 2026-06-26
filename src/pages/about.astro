@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import profilePic from '../assets/profile_pic_under_1mb.jpg';
+import FadeIn from '../components/FadeIn.astro';
+
+const experience = [
+  {
+    role: "Systems Engineer",
+    company: "Clio",
+    period: "Jul 2025 – Present",
+    skills: ["Engineering", "Automation", "Azure DevOps", "C#", "IaC"],
+  },
+  {
+    role: "Software Developer",
+    company: "ShareDo",
+    period: "Nov 2021 – Mar 2026",
+    skills: ["C#", "KnockoutJS", "JavaScript", "SQL"],
+  },
+  {
+    role: "Software Developer",
+    company: "Brainboxes Ltd",
+    period: "Jun 2020 – Oct 2021",
+    skills: [],
+  },
+  {
+    role: "Internship Trainee",
+    company: "Northcoders",
+    period: "Mar 2019 – Jun 2019",
+    skills: [],
+  },
+];
+---
+
+<Layout title="About">
+  <section class="max-w-4xl mx-auto px-6 py-16">
+
+    <!-- Hero row: photo + intro -->
+    <FadeIn>
+      <div class="flex flex-col md:flex-row gap-10 items-start mb-16">
+        <div class="shrink-0">
+          <Image
+            src={profilePic}
+            alt="Josh Kain"
+            width={160}
+            height={160}
+            class="rounded-full border-2 border-zinc-800 object-cover w-36 h-36 md:w-40 md:h-40"
+          />
+        </div>
+        <div>
+          <p class="font-mono text-sm text-zinc-500 mb-2">The person behind the broken things</p>
+          <h1 class="text-3xl font-bold text-zinc-100 mb-6">Josh Kain</h1>
+          <div class="space-y-4 text-zinc-400 leading-relaxed">
+            <p>
+              Systems Engineer based in Manchester, currently at Clio — working on the infrastructure, automation, and CI/CD pipelines that keep production running. Before that, over four years as a Software Developer at ShareDo building real-world applications in C# and JavaScript.
+            </p>
+            <p>
+              Started in tech the honest way — a Northcoders bootcamp, a barista who wanted options. Now I'm the person thinking about governance, IaC, and why that rushed deployment is going to cost someone a weekend in three months.
+            </p>
+            <p class="border-l-2 border-zinc-700 pl-4 italic text-zinc-300">
+              "Move fast where you can. Never rush the infrastructure."
+            </p>
+            <p>
+              Outside of work I run a homelab where I self-host services, tinker with networking, and build things that sometimes work exactly as intended. This site is one of them.
+            </p>
+          </div>
+        </div>
+      </div>
+    </FadeIn>
+
+    <!-- Experience -->
+    <FadeIn delay={100}>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Experience</h2>
+    </FadeIn>
+    <div class="space-y-4">
+      {experience.map((job, i) => (
+        <FadeIn delay={i * 80}>
+          <div class="border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <h3 class="font-semibold text-zinc-100">{job.role}</h3>
+                <p class="text-zinc-400 text-sm">{job.company}</p>
+              </div>
+              <span class="font-mono text-xs text-zinc-500 shrink-0 ml-4">{job.period}</span>
+            </div>
+            {job.skills.length > 0 && (
+              <div class="flex gap-2 flex-wrap mt-3">
+                {job.skills.map(skill => (
+                  <span class="text-xs font-mono text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded">{skill}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+</Layout>

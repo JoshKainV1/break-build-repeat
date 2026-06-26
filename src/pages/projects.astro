@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ProjectFilter from '../components/ProjectFilter';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.map(p => ({
+  id: p.id,
+  title: p.data.title,
+  description: p.data.description,
+  tags: p.data.tags,
+  status: p.data.status,
+}));
+---
+
+<Layout title="Projects">
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <p class="font-mono text-sm text-zinc-500 mb-2">What I've been building</p>
+    <h1 class="text-3xl font-bold text-zinc-100 mb-10">Projects</h1>
+    <ProjectFilter projects={projects} client:load />
+  </section>
+</Layout>

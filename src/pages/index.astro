@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import FadeIn from '../components/FadeIn.astro';
+import Terminal from '../components/Terminal';
+
+const allProjects = await getCollection('projects');
+const featured = allProjects.filter(p => p.data.featured);
+---
+
+<Layout title="Home">
+  <Hero />
+
+  <!-- Terminal -->
+  <section class="max-w-4xl mx-auto px-6 pb-16">
+    <FadeIn>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Try the terminal</h2>
+      <Terminal client:load />
+    </FadeIn>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="max-w-4xl mx-auto px-6 pb-24">
+    <FadeIn>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Featured projects</h2>
+    </FadeIn>
+    <div class="grid gap-4">
+      {featured.map((project, i) => (
+        <FadeIn delay={i * 100}>
+          <a
+            href={`/projects/${project.id}`}
+            class="group block border border-zinc-800 rounded-lg p-6 transition-all duration-300 hover:border-zinc-500 hover:shadow-[0_0_30px_-5px_rgba(161,161,170,0.15)] hover:-translate-y-0.5"
+          >
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="font-semibold text-zinc-100 group-hover:text-white transition-colors">{project.data.title}</h3>
+              <span class={`text-xs px-2 py-0.5 rounded font-mono shrink-0 ml-3 ${project.data.status === 'live' ? 'bg-green-900 text-green-300' : project.data.status === 'broken' ? 'bg-red-900 text-red-300' : 'bg-yellow-900 text-yellow-300'}`}>
+                {project.data.status === 'live' ? 'Live' : project.data.status === 'broken' ? 'Gloriously broken' : 'In progress'}
+              </span>
+            </div>
+            <p class="text-zinc-400 text-sm mb-4">{project.data.description}</p>
+            <div class="flex gap-2 flex-wrap">
+              {project.data.tags.map((tag: string) => (
+                <span class="text-xs font-mono text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded">{tag}</span>
+              ))}
+            </div>
+          </a>
+        </FadeIn>
+      ))}
+    </div>
+    <FadeIn delay={200}>
+      <div class="mt-8">
+        <a href="/projects" class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
+          All projects →
+        </a>
+      </div>
+    </FadeIn>
+  </section>
+</Layout>
