@@ -9,24 +9,32 @@ const experience = [
     role: "Systems Engineer",
     company: "Clio",
     period: "Jul 2025 – Present",
+    location: "Manchester · Hybrid",
+    blurb: "Infrastructure, automation, and the CI/CD pipelines that keep production running. The person asking whether that deployment is going to cost someone a weekend in three months.",
     skills: ["Engineering", "Automation", "Azure DevOps", "C#", "IaC"],
   },
   {
     role: "Software Developer",
     company: "ShareDo",
     period: "Nov 2021 – Mar 2026",
+    location: "Alderley Edge · Remote",
+    blurb: "Four and a half years building real-world applications on a large production codebase in C# and KnockoutJS — the years that taught me what happens to code after it ships.",
     skills: ["C#", "KnockoutJS", "JavaScript", "SQL"],
   },
   {
     role: "Software Developer",
     company: "Brainboxes Ltd",
     period: "Jun 2020 – Oct 2021",
+    location: "",
+    blurb: "First developer role after retraining — where bootcamp theory met production reality.",
     skills: [],
   },
   {
     role: "Internship Trainee",
     company: "Northcoders",
     period: "Mar 2019 – Jun 2019",
+    location: "Manchester",
+    blurb: "Completed the Northcoders course. Went in a barista working for the sake of working; came out with options and the ability to grow. Everything on this site traces back here.",
     skills: [],
   },
 ];
@@ -79,10 +87,15 @@ const experience = [
             <div class="flex items-start justify-between mb-2">
               <div>
                 <h3 class="font-semibold text-zinc-100">{job.role}</h3>
-                <p class="text-zinc-400 text-sm">{job.company}</p>
+                <p class="text-zinc-400 text-sm">
+                  {job.company}{job.location && <span class="text-zinc-600"> · {job.location}</span>}
+                </p>
               </div>
               <span class="font-mono text-xs text-zinc-500 shrink-0 ml-4">{job.period}</span>
             </div>
+            {job.blurb && (
+              <p class="text-zinc-500 text-sm leading-relaxed mt-2">{job.blurb}</p>
+            )}
             {job.skills.length > 0 && (
               <div class="flex gap-2 flex-wrap mt-3">
                 {job.skills.map(skill => (
