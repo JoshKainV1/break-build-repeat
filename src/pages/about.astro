@@ -4,6 +4,19 @@ import { Image } from 'astro:assets';
 import profilePic from '../assets/profile_pic_under_1mb.jpg';
 import FadeIn from '../components/FadeIn.astro';
 
+const currently = [
+  "Building out the homelab — Proxmox for virtualisation, OPNsense on the edge, TrueNAS for storage",
+  "Getting properly good at IaC, with Kubernetes and WireGuard on the bench next to it",
+  "Shipping projects and documenting the breakage on this site",
+];
+
+const toolbox = [
+  { group: "Languages", items: ["C#", "JavaScript", "Python", "SQL"] },
+  { group: "Frontend", items: ["React", "Astro", "Tailwind", "KnockoutJS"] },
+  { group: "Infrastructure", items: ["Docker", "Azure DevOps", "OPNsense", "TrueNAS", "ZFS"] },
+  { group: "Currently learning", items: ["IaC", "Proxmox", "Kubernetes", "WireGuard"] },
+];
+
 const experience = [
   {
     role: "Systems Engineer",
@@ -76,6 +89,38 @@ const experience = [
       </div>
     </FadeIn>
 
+    <!-- Currently -->
+    <FadeIn delay={100}>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Currently</h2>
+      <div class="border border-zinc-800 rounded-lg p-5 mb-16">
+        <ul class="space-y-3">
+          {currently.map(item => (
+            <li class="flex items-start gap-3 text-zinc-400 text-sm leading-relaxed">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0 mt-1.5"></span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </FadeIn>
+
+    <!-- Toolbox -->
+    <FadeIn delay={100}>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Toolbox</h2>
+      <div class="grid sm:grid-cols-2 gap-4 mb-16">
+        {toolbox.map(({ group, items }) => (
+          <div class="border border-zinc-800 rounded-lg p-5">
+            <h3 class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-3">{group}</h3>
+            <div class="flex gap-2 flex-wrap">
+              {items.map(item => (
+                <span class="text-xs font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded">{item}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </FadeIn>
+
     <!-- Experience -->
     <FadeIn delay={100}>
       <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-widest mb-6">Experience</h2>
@@ -107,5 +152,22 @@ const experience = [
         </FadeIn>
       ))}
     </div>
+
+    <!-- CTA -->
+    <FadeIn delay={150}>
+      <div class="mt-16 pt-10 border-t border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <p class="text-zinc-400">
+          Want to talk infrastructure, homelabs, or why the build is broken?
+        </p>
+        <div class="flex gap-4 shrink-0">
+          <a href="/contact" class="bg-zinc-100 text-zinc-950 px-5 py-2.5 rounded text-sm font-medium hover:bg-white transition-colors">
+            Get in touch
+          </a>
+          <a href="https://github.com/JoshKainV1" target="_blank" rel="noopener" class="border border-zinc-700 text-zinc-300 px-5 py-2.5 rounded text-sm font-medium hover:border-zinc-500 transition-colors">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </FadeIn>
   </section>
 </Layout>
