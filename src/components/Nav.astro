@@ -11,7 +11,14 @@ const current = Astro.url.pathname;
 
 <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300">
   <div class="max-w-4xl mx-auto flex items-center justify-between">
-    <a href="/" class="font-mono text-sm font-bold tracking-widest text-zinc-100">
+    <a href="/" class="flex items-center gap-2.5 font-mono text-sm font-bold tracking-widest text-zinc-100">
+      <svg viewBox="0 0 64 64" class="w-5 h-5 shrink-0" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#09090b"/>
+        <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#27272a" stroke-width="3"/>
+        <path d="M22 15 L22 46" fill="none" stroke="#e4e4e7" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="31" cy="36.5" r="9.5" fill="none" stroke="#e4e4e7" stroke-width="7"/>
+        <circle cx="49" cy="42" r="5.5" fill="#4ade80"/>
+      </svg>
       break.build.repeat
     </a>
     <ul class="flex gap-6">
