@@ -62,6 +62,7 @@ const COMMANDS: Record<string, () => string[]> = {
     'Opening contact channels...',
     '',
     '  <span class="text-green-400">GitHub</span>   → <a href="https://github.com/JoshKainV1" target="_blank" class="underline text-zinc-300 hover:text-white">github.com/JoshKainV1</a>',
+    '  <span class="text-green-400">LinkedIn</span> → <a href="https://www.linkedin.com/in/joshua-kain-79a768221/" target="_blank" class="underline text-zinc-300 hover:text-white">linkedin.com/in/joshua-kain</a>',
     '  <span class="text-green-400">Email</span>    → <a href="mailto:jkainV7@gmail.com" class="underline text-zinc-300 hover:text-white">jkainV7@gmail.com</a>',
   ],
 };

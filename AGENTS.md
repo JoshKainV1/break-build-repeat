@@ -82,13 +82,13 @@ Press `g` then: `h` home · `p` projects · `a` about · `c` contact
 
 ## TODO
 
-- [ ] Add profile photo to About page
+- [x] Add profile photo to About page
 - [ ] Add homelab/hardware photos to familyHub project page
 - [ ] Add screenshots of familyHub app running
 - [ ] Connect repo to Cloudflare Pages for deployment
 - [ ] Add expandable career timeline to About page
 - [ ] Add skill/tech radar interactive diagram
-- [ ] Add LinkedIn link to Contact page
+- [x] Add LinkedIn link to Contact page
 - [ ] Add more projects as they're built
 - [ ] Custom domain setup on Cloudflare Pages
 
