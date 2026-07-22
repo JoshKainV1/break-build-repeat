@@ -31,9 +31,9 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 ## Stack
 
 - **OPNsense (N150 fanless)** — gateway, firewall, DHCP, DNS (Unbound), IDS/IPS (Suricata), WireGuard VPN
-- **TrueNAS SCALE (Ryzen 5 3600, 32GB RAM)** — ZFS mirror pool over SAS via LSI HBA, NFS shares for app data and media
+- **TrueNAS SCALE (Ryzen 5 5600G, 32GB RAM)** — striped ZFS pools over SAS via LSI HBA, with nightly replication to a backup pool instead of mirrored redundancy
 - **GoLake 2.5GbE managed switch** — VLAN tagging and trunking
-- **Acer i7 (32GB RAM, GTX 1050Ti)** — Docker host running the full application stack
+- **GMKtec K12 (Ryzen 7 H 255, 32GB RAM, Radeon 780M)** — Proxmox VE host running the app stack in a Docker VM alongside Home Assistant
 - **C# ASP.NET Core 8** — REST API backend
 - **React 19 + Vite** — frontend
 - **PostgreSQL 16** — database
@@ -41,7 +41,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 - **JWT + PBKDF2-SHA256** — bearer-token auth; no public registration, accounts provisioned via script
 - **nginx** — serves the built React app and reverse-proxies `/api/*` to the backend, so the browser only ever talks to one origin
 - **Docker Compose** — orchestrates backend, frontend, database, and PgAdmin
-- **Jellyfin / Plex** — GPU-accelerated media server using NVIDIA NVENC (8–10 simultaneous 1080p streams)
+- **Jellyfin** — GPU-accelerated media server using VA-API on the K12's integrated Radeon 780M (~3–4 simultaneous hardware transcodes)
 
 ## What I learned
 
@@ -61,7 +61,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 ## What's next
 
-- Hardware refresh in progress: new GMKtec mini PC joining the stack, NAS build still underway
+- TrueNAS build still in progress: PSU, 2.5GbE NIC, and boot drive still to source, plus intake-testing all six Exos drives (SMART, sector format, SED checks) before the striped tank/vault pools go live
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
 - WireGuard VPN for remote family access
 - Prometheus + Grafana for monitoring across all nodes
