@@ -29,3 +29,14 @@ Static site built with Astro for performance, React for interactive components, 
 - How Astro's file-based routing and static generation works
 - How to connect a GitHub repo to Cloudflare Pages for CI/CD
 - How to structure a component-based site from scratch
+
+## What broke
+
+A committed `package-lock.json` (generated on Windows) pinned platform-specific optional dependencies that don't exist on Cloudflare's Linux build image — the first deploy failed. Fixed by removing the lock file, gitignoring it, and letting Cloudflare's build resolve platform deps fresh instead.
+
+## What's next
+
+- Homelab/hardware photos and app screenshots on the familyHub project page
+- Expandable career timeline on the About page
+- Skill/tech radar interactive diagram
+- More projects as they're built

@@ -15,6 +15,8 @@ I wanted full control over my family's data — media, photos, shared calendars,
 
 A full homelab stack built from scratch: a dedicated firewall appliance, a TrueNAS storage server, and an application host running Docker containers. The application itself is a C# ASP.NET Core backend, React frontend, and PostgreSQL database — all containerised and connected via an internal VLAN.
 
+The app itself covers movie/TV streaming with seekable playback, real-time family chat over a SignalR hub, a shared to-do list, photo sharing, and an admin panel for user management — all behind JWT auth with no public sign-up; accounts are provisioned by script.
+
 ## Infrastructure
 
 The network is segmented into four VLANs, managed by an OPNsense firewall on an N150 fanless appliance:
@@ -35,6 +37,9 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 - **C# ASP.NET Core 8** — REST API backend
 - **React 19 + Vite** — frontend
 - **PostgreSQL 16** — database
+- **SignalR** — real-time chat, delivered per-user over WebSocket connection groups
+- **JWT + PBKDF2-SHA256** — bearer-token auth; no public registration, accounts provisioned via script
+- **nginx** — serves the built React app and reverse-proxies `/api/*` to the backend, so the browser only ever talks to one origin
 - **Docker Compose** — orchestrates backend, frontend, database, and PgAdmin
 - **Jellyfin / Plex** — GPU-accelerated media server using NVIDIA NVENC (8–10 simultaneous 1080p streams)
 
