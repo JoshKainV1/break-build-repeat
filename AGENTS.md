@@ -16,7 +16,7 @@ npm run preview   # preview production build
 - **React** — interactive components (Terminal, ProjectFilter)
 - **Tailwind CSS v4** — utility-first styling, `@tailwindcss/typography` installed
 - **TypeScript** — strict mode
-- **Cloudflare Pages** — deployment target (not yet connected)
+- **Cloudflare Pages** — deployed at [break-build-repeat.uk](https://break-build-repeat.uk), auto-deploys on push to `master`
 
 ## Project structure
 
@@ -54,6 +54,7 @@ tags: ["tag1", "tag2"]
 status: wip          # live | wip | broken
 featured: false      # true = appears on homepage
 href: "https://..."  # optional external link
+lastUpdated: 2026-01-01  # required, YYYY-MM-DD unquoted
 ---
 
 ## The problem
@@ -85,12 +86,12 @@ Press `g` then: `h` home · `p` projects · `a` about · `c` contact
 - [x] Add profile photo to About page
 - [ ] Add homelab/hardware photos to familyHub project page
 - [ ] Add screenshots of familyHub app running
-- [ ] Connect repo to Cloudflare Pages for deployment
+- [x] Connect repo to Cloudflare Pages for deployment
 - [ ] Add expandable career timeline to About page
 - [ ] Add skill/tech radar interactive diagram
 - [x] Add LinkedIn link to Contact page
 - [ ] Add more projects as they're built
-- [ ] Custom domain setup on Cloudflare Pages
+- [x] Custom domain setup on Cloudflare Pages
 
 ## Owner
 
