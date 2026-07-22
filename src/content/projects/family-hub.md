@@ -57,6 +57,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 ## What's next
 
+- Hardware refresh in progress: N150 OPNsense firewall replacing the N100, a new GMKtec mini PC joining the stack, NAS build still underway
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
 - WireGuard VPN for remote family access
 - Prometheus + Grafana for monitoring across all nodes

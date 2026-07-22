@@ -32,11 +32,17 @@ All permission rules live in a single pure service — plain objects in, bool ou
 - Writing permission rules test-first surfaces edge cases early: mentor access ended up requiring *both* the mentor pairing and shared team membership, guarding against stale pairing data
 - In multi-tenant systems, checking tenant isolation first in every rule — before any role logic — is the habit that prevents the worst class of bug
 - Designing the domain model (template vs. case vs. task) before writing any endpoints made the permission matrix much easier to reason about
+- Guard ordering matters as much as the guards themselves: the teamless-hire check has to run *before* the team-mismatch check, or a hire with no team ends up misclassified as "wrong team" with a misleading error
+- Returning failures as data (a `ProvisioningResult` with `Success`/`Failure` factories) instead of throwing suits an API boundary better — bad IDs are an expected condition, not an exceptional one
+- Testing against SQLite in-memory mode instead of EF Core's InMemory provider actually enforces foreign keys, unique indexes, and delete-behavior rules the fake provider would silently let through
+
+## What broke
+
+Registered `IOnboardingProvisioningService` in DI — but every provisioning test constructs the service directly, so the whole suite stayed green while the real app 500'd on the first call. Only showed up by hitting the API through Scalar. One-line fix (`builder.Services.AddScoped<IOnboardingProvisioningService, OnboardingProvisioningService>()`), but a reminder that tests bypassing the container can't catch container wiring bugs.
 
 ## What's next
 
-- Provisioning service: copy a template into a new hire's case
-- First EF migration + local Postgres via Docker
 - EF global query filters on `CompanyId` as a DB-level tenant-isolation safety net
-- Login endpoint issuing JWTs, then controllers and the actual API surface
-- Frontend UI — deliberately last, after the domain and permissions are solid
+- Login endpoint issuing JWTs
+- Controllers / broader API surface — in progress (`POST /api/cases` shipped; more endpoints to come)
+- Frontend UI — not started yet, deliberately last, after the domain and permissions are solid
