@@ -18,7 +18,7 @@ A full homelab stack built from scratch: a dedicated firewall appliance, a TrueN
 
 ## Infrastructure
 
-The network is segmented into four VLANs, managed by an OPNsense firewall on an N100 fanless appliance:
+The network is segmented into four VLANs, managed by an OPNsense firewall on an N150 fanless appliance:
 
 - **VLAN 10 (MGMT)** — firewall UI, switch UI, admin only
 - **VLAN 20 (SERVERS)** — TrueNAS NAS, application host, all services
@@ -29,7 +29,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 ## Stack
 
-- **OPNsense (N100 fanless)** — gateway, firewall, DHCP, DNS (Unbound), IDS/IPS (Suricata), WireGuard VPN
+- **OPNsense (N150 fanless)** — gateway, firewall, DHCP, DNS (Unbound), IDS/IPS (Suricata), WireGuard VPN
 - **TrueNAS SCALE (Ryzen 5 3600, 32GB RAM)** — ZFS mirror pool over SAS via LSI HBA, NFS shares for app data and media
 - **GoLake 2.5GbE managed switch** — VLAN tagging and trunking
 - **Acer i7 (32GB RAM, GTX 1050Ti)** — Docker host running the full application stack
@@ -57,7 +57,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 ## What's next
 
-- Hardware refresh in progress: N150 OPNsense firewall replacing the N100, a new GMKtec mini PC joining the stack, NAS build still underway
+- Hardware refresh in progress: new GMKtec mini PC joining the stack, NAS build still underway
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
 - WireGuard VPN for remote family access
 - Prometheus + Grafana for monitoring across all nodes
