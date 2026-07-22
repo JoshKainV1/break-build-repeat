@@ -4,6 +4,8 @@ description: "A self-hosted home platform — media server, family dashboard, an
 tags: ["homelab", "self-hosted", "Docker", "C#", "React", "PostgreSQL", "OPNsense", "TrueNAS"]
 status: wip
 featured: true
+href: "https://github.com/JoshKainV1/familyHub"
+lastUpdated: 2026-07-22
 ---
 
 ## The problem

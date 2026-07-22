@@ -5,6 +5,7 @@ tags: ["JavaScript", "Azure", "automation"]
 status: wip
 featured: false
 href: "https://github.com/JoshKainV1/-Zendesk-Azure-DevOps-CAB-Linear-bridge"
+lastUpdated: 2026-06-30
 ---
 
 ## The problem

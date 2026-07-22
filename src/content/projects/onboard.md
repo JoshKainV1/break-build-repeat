@@ -4,6 +4,8 @@ description: "Multi-tenant SaaS for employee onboarding — per-team templates, 
 tags: ["C#", ".NET", "React", "PostgreSQL"]
 status: wip
 featured: false
+href: "https://github.com/JoshKainV1/Onboard"
+lastUpdated: 2026-07-22
 ---
 
 ## The problem

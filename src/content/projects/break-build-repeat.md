@@ -5,6 +5,7 @@ tags: ["Astro", "React", "Tailwind", "Cloudflare"]
 status: live
 featured: true
 href: "https://github.com/JoshKainV1/break-build-repeat"
+lastUpdated: 2026-07-22
 ---
 
 ## The problem

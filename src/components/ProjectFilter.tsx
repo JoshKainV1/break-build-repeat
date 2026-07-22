@@ -8,7 +8,11 @@ interface Project {
   description: string;
   tags: string[];
   status: Status;
+  lastUpdated: string;
 }
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
 interface Props {
   projects: Project[];
@@ -121,6 +125,7 @@ export default function ProjectFilter({ projects }: Props) {
                 </div>
                 <span className="text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors ml-4 shrink-0">Read more →</span>
               </div>
+              <p className="font-mono text-xs text-zinc-600 mt-3">Updated {formatDate(project.lastUpdated)}</p>
             </a>
           ))
         )}

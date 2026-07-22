@@ -10,6 +10,7 @@ const projects = allProjects.map(p => ({
   description: p.data.description,
   tags: p.data.tags,
   status: p.data.status,
+  lastUpdated: p.data.lastUpdated.toISOString(),
 }));
 ---
 
