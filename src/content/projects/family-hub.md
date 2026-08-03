@@ -63,6 +63,7 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 - TrueNAS build still in progress: PSU, 2.5GbE NIC, and boot drive still to source, plus intake-testing all six Exos drives (SMART, sector format, SED checks) before the striped tank/vault pools go live
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
+- Phase 3: migrate the app stack from Docker Compose to a self-hosted 3-node k3s cluster on Proxmox — MetalLB for bare-metal load balancing, TrueNAS-backed persistent volumes, and Argo CD for GitOps deploys (see [Homelab Kubernetes](/projects/homelab-kubernetes))
 - WireGuard VPN for remote family access
 - Prometheus + Grafana for monitoring across all nodes
 - Offsite backup to cloud cold storage (B2 or S3)
