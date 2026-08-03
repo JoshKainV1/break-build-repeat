@@ -51,5 +51,6 @@ Earlier, I'd registered `IOnboardingProvisioningService` in DI — but every pro
 ## What's next
 
 - Frontend UI (React) — a login screen, then screens that drive the API. Deliberately last, after the domain, permissions, and auth are solid.
+- Tenant-scoped search across users, teams, and templates — starting with `ILIKE`, then `pg_trgm` + a GIN index for fast, fuzzy name/email matching
 - EF global query filters on `CompanyId` as a DB-level tenant-isolation safety net
 - Invite / set-password flow — users created via `POST /api/users` currently have no password and can't log in yet
