@@ -4,6 +4,7 @@ description: "Building a tool-calling AI agent that reasons in a loop — decidi
 tags: ["LLM", "AI agents", "tool-calling", "LlamaIndex", "Python", "AI"]
 status: wip
 featured: false
+href: "https://github.com/JoshKainV1/llamaindex-agent"
 lastUpdated: 2026-08-03
 ---
 

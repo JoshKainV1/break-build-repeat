@@ -4,6 +4,7 @@ description: "Closing the gap between copy-pasting shell one-liners and actually
 tags: ["Bash", "Linux", "shell", "scripting", "learning"]
 status: wip
 featured: false
+href: "https://github.com/JoshKainV1/learning-bash"
 lastUpdated: 2026-08-03
 ---
 

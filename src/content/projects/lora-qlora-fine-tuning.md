@@ -4,6 +4,7 @@ description: "Fine-tuning an open-source LLM on a single GPU using parameter-eff
 tags: ["LLM", "fine-tuning", "LoRA", "QLoRA", "PyTorch", "AI"]
 status: wip
 featured: false
+href: "https://github.com/JoshKainV1/lora-qlora-fine-tuning"
 lastUpdated: 2026-08-03
 ---
 
