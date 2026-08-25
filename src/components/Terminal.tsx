@@ -1,8 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 
 const projects = [
+  { name: 'onboard', status: 'wip', tags: ['C#', '.NET', 'React', 'PostgreSQL'] },
   { name: 'family-hub', status: 'wip', tags: ['homelab', 'Docker', 'C#', 'React'] },
   { name: 'break-build-repeat', status: 'live', tags: ['Astro', 'React', 'Tailwind'] },
+  { name: 'zendesk-bridge', status: 'wip', tags: ['JavaScript', 'Azure', 'automation'] },
+  { name: 'homelab-kubernetes', status: 'wip', tags: ['Kubernetes', 'k3s', 'Proxmox'] },
+  { name: 'rag-from-scratch', status: 'wip', tags: ['LLM', 'RAG', 'pgvector'] },
+  { name: 'llamaindex-agent', status: 'wip', tags: ['LLM', 'AI agents', 'LlamaIndex'] },
+  { name: 'lora-qlora-fine-tuning', status: 'wip', tags: ['LLM', 'LoRA', 'QLoRA'] },
+  { name: 'learning-bash', status: 'wip', tags: ['Bash', 'Linux', 'scripting'] },
 ];
 
 const COMMANDS: Record<string, () => string[]> = {
@@ -45,7 +52,8 @@ const COMMANDS: Record<string, () => string[]> = {
     '  Docker  Azure DevOps  OPNsense  TrueNAS  ZFS',
     '',
     '## Currently learning',
-    '  IaC  WireGuard  Proxmox  Kubernetes',
+    '  Bash  WireGuard  Proxmox  Kubernetes  IaC',
+    '  LLMs & RAG  LoRA/QLoRA  AI agents (LlamaIndex)',
   ],
   homelab: () => [
     '# Homelab — build in progress',

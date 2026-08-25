@@ -3,7 +3,7 @@ title: "Onboard"
 description: "Multi-tenant SaaS for employee onboarding — per-team templates, per-hire editable cases, and a role-scoped permission layer built strictly test-first."
 tags: ["C#", ".NET", "React", "PostgreSQL"]
 status: wip
-featured: false
+featured: true
 lastUpdated: 2026-08-25
 ---
 
