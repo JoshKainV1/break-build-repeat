@@ -4,7 +4,7 @@ description: "Migrating the familyHub stack from Docker Compose to a self-hosted
 tags: ["homelab", "Kubernetes", "k3s", "Proxmox", "GitOps", "self-hosted"]
 status: wip
 featured: false
-lastUpdated: 2026-08-03
+lastUpdated: 2026-08-25
 ---
 
 ## The problem

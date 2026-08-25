@@ -5,7 +5,7 @@ tags: ["LLM", "RAG", "Python", "embeddings", "pgvector", "AI"]
 status: wip
 featured: false
 href: "https://github.com/JoshKainV1/rag-from-scratch"
-lastUpdated: 2026-08-03
+lastUpdated: 2026-08-25
 ---
 
 ## The problem
