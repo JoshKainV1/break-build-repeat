@@ -4,7 +4,7 @@ description: "Multi-tenant SaaS for employee onboarding — per-team templates, 
 tags: ["C#", ".NET", "React", "PostgreSQL"]
 status: wip
 featured: true
-lastUpdated: 2026-08-25
+lastUpdated: 2026-10-05
 ---
 
 ## The problem
@@ -17,9 +17,9 @@ A multi-tenant API where each company defines per-team onboarding templates, and
 
 All permission rules live in a single pure service — plain objects in, bool out, no database access — with every check enforcing company (tenant) isolation before any role logic runs. The whole permission matrix was built test-first: 27 tests written against interface stubs, red before green, before a single controller existed. `RoleAuthMiddleware` parses the JWT once per request and attaches user, company, and role to the request context for everything downstream.
 
-On top of that now sits real auth. `POST /api/signup` bootstraps a company and its first HR Admin together — solving the multi-tenant chicken-and-egg where the first admin can't be created by an admin. `POST /api/auth/login` exchanges credentials for a signed JWT (HS256), with every failure mode returning an identical result so the endpoint leaks nothing about which accounts exist. The protected endpoints — `POST /api/users` (HR-Admin-only user creation), `GET /api/users` (a tenant-scoped list filtered by what your role is allowed to see), and `POST /api/cases` (case provisioning) — sit behind `[Authorize]`, and the acting user is loaded fresh from the database on every request rather than trusted from the token, so a demoted user loses access immediately. Status codes carry intent: `403` for authenticated-but-not-allowed, `404` to disguise cross-tenant resources rather than confirm they exist. The codebase is organised into feature-folder vertical slices (Auth, Signup, Users, Onboarding, Permissions) rather than by technical layer.
+On top of that now sits real auth. `POST /api/signup` bootstraps a company and its first HR Admin together — solving the multi-tenant chicken-and-egg where the first admin can't be created by an admin. `POST /api/auth/login` exchanges credentials for a signed JWT (HS256), with every failure mode returning an identical result so the endpoint leaks nothing about which accounts exist. The protected endpoints — `POST /api/users` (HR-Admin-only user creation), `GET /api/users` and `GET /api/templates` (tenant-scoped lists filtered by what your role is allowed to see), and `POST /api/cases` (case provisioning) — sit behind `[Authorize]`, and the acting user is loaded fresh from the database on every request rather than trusted from the token, so a demoted user loses access immediately. Status codes carry intent: `403` for authenticated-but-not-allowed, `404` to disguise cross-tenant resources rather than confirm they exist. The codebase is organised into feature-folder vertical slices (Auth, Signup, Users, Onboarding, Permissions) rather than by technical layer.
 
-A React frontend now sits on top of the API: login, logout, session persistence, and screens to create and list users — built test-first with Vitest and React Testing Library, the same discipline as the backend. The onboarding-case UI is the next slice.
+A React frontend now sits on top of the API: login, logout, session persistence, and screens to create and list users — built test-first with Vitest and React Testing Library, the same discipline as the backend. The onboarding-case UI is the slice in progress now, unblocked by the template-listing endpoint.
 
 ## Stack
 
@@ -54,7 +54,7 @@ Earlier, I'd registered `IOnboardingProvisioningService` in DI — but every pro
 
 ## What's next
 
-- Frontend: the onboarding-case UI — building on the login and user-management screens already shipped, currently blocked on a template-listing endpoint
+- Frontend: finish the onboarding-case UI — underway, building on the login and user-management screens already shipped and the new `GET /api/templates` endpoint
 - Tenant-scoped search across users, teams, and templates — starting with `ILIKE`, then `pg_trgm` + a GIN index for fast, fuzzy name/email matching
 - EF global query filters on `CompanyId` as a DB-level tenant-isolation safety net
 - Invite / set-password flow — users created via `POST /api/users` currently have no password and can't log in yet

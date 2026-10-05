@@ -4,7 +4,7 @@ description: "A self-hosted home platform — media server, family dashboard, an
 tags: ["homelab", "self-hosted", "Docker", "C#", "React", "PostgreSQL", "OPNsense", "TrueNAS"]
 status: wip
 featured: true
-lastUpdated: 2026-07-22
+lastUpdated: 2026-10-05
 ---
 
 ## The problem
@@ -27,6 +27,8 @@ The network is segmented into four VLANs, managed by an OPNsense firewall on an 
 - **VLAN 40 (GUEST/IoT)** — TVs, tablets, smart devices, limited access
 
 Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't reach SERVERS. GUEST can reach Plex but nothing else. Nothing reaches MGMT except admin devices.
+
+For now the OPNsense box sits behind my existing home router while I test it. The VLANs are up and running, but services like the NAS still need moving onto them.
 
 ## Stack
 
@@ -61,7 +63,8 @@ Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't re
 
 ## What's next
 
-- TrueNAS build still in progress: PSU, 2.5GbE NIC, and boot drive still to source, plus intake-testing all six Exos drives (SMART, sector format, SED checks) before the striped tank/vault pools go live
+- Start linking services to the VLANs, beginning with the NAS
+- TrueNAS is built and running, but not finished: the current PSU is going to be swapped for a more efficient 500W 80 Plus Gold unit, the 2.5GbE NIC is sourced and still needs fitting, and the airflow needs improving before I'm happy with it
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
 - Phase 3: migrate the app stack from Docker Compose to a self-hosted 3-node k3s cluster on Proxmox — MetalLB for bare-metal load balancing, TrueNAS-backed persistent volumes, and Argo CD for GitOps deploys (see [Homelab Kubernetes](/projects/homelab-kubernetes))
 - WireGuard VPN for remote family access
