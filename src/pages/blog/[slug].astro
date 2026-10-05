@@ -1,0 +1,91 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FadeIn from '../../components/FadeIn.astro';
+import { getPosts, formatDate } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const minutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 220));
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <div id="read-progress" class="fixed top-0 left-0 h-0.5 w-0 bg-green-400 z-[60]"></div>
+
+  <article class="max-w-3xl mx-auto px-6 py-16">
+
+    <FadeIn>
+      <header class="mb-12 pb-10 border-b border-zinc-800">
+        <a href="/blog" class="font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors mb-8 inline-block">
+          ← Back to blog
+        </a>
+        <p class="font-mono text-sm text-zinc-500 mb-3">
+          <span class="text-green-400">$</span> cat blog/{post.id}.md
+        </p>
+        <h1 class="text-4xl font-bold text-zinc-100 leading-tight mb-4">{post.data.title}</h1>
+        <p class="text-zinc-400 text-lg leading-relaxed mb-6">{post.data.description}</p>
+        <div class="flex items-center gap-3 flex-wrap font-mono text-xs text-zinc-500">
+          <span>{formatDate(post.data.pubDate)}</span>
+          <span class="text-zinc-700">·</span>
+          <span>{minutes} min read</span>
+          {post.data.draft && (
+            <span class="px-2 py-0.5 rounded bg-yellow-900 text-yellow-300">Draft</span>
+          )}
+          <span class="flex gap-2 flex-wrap sm:ml-auto">
+            {post.data.tags.map((tag: string) => (
+              <span class="bg-zinc-900 px-2 py-0.5 rounded">{tag}</span>
+            ))}
+          </span>
+        </div>
+      </header>
+    </FadeIn>
+
+    <!-- Not wrapped in FadeIn: a long post never reaches its 10% intersection threshold on small screens -->
+    <div class="prose prose-invert prose-zinc prose-lg max-w-none
+      prose-headings:text-zinc-100 prose-headings:font-semibold prose-headings:scroll-mt-24
+      prose-h2:text-2xl prose-h2:mt-16 prose-h2:mb-5
+      prose-h2:before:content-['#'] prose-h2:before:font-mono prose-h2:before:text-green-400 prose-h2:before:mr-3
+      prose-p:text-zinc-300 prose-p:leading-relaxed
+      prose-li:text-zinc-300 prose-li:marker:text-zinc-600
+      prose-strong:text-zinc-100
+      prose-a:text-zinc-100 prose-a:underline-offset-4 prose-a:decoration-zinc-600 hover:prose-a:decoration-green-400
+      prose-hr:border-zinc-800
+      prose-blockquote:border-l-2 prose-blockquote:border-green-400 prose-blockquote:bg-zinc-900/60 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:px-5 prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-zinc-300
+      [&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none
+      prose-table:font-mono prose-table:text-sm
+      prose-thead:border-zinc-700 prose-tr:border-zinc-800
+      prose-th:text-zinc-500 prose-th:font-normal prose-th:uppercase prose-th:text-xs prose-th:tracking-widest
+      prose-td:text-zinc-300
+      prose-pre:bg-zinc-900/60! prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-lg prose-pre:text-sm
+      prose-code:font-mono prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
+      [&_:not(pre)>code]:text-green-400 [&_:not(pre)>code]:bg-zinc-900 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:text-[0.85em]">
+      <Content />
+    </div>
+
+    <footer class="border-t border-zinc-800 mt-16 pt-8">
+      <a href="/blog" class="font-mono text-sm text-zinc-400 hover:text-zinc-100 transition-colors">← All posts</a>
+    </footer>
+
+  </article>
+</Layout>
+
+<script>
+  import '../../components/widgets/subnet-calc';
+
+  const bar = document.getElementById('read-progress');
+  const update = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    if (bar) bar.style.width = `${scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0}%`;
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+</script>

@@ -27,8 +27,13 @@ src/
     ProjectFilter.tsx   # Live search + filter on projects page
     FadeIn.astro        # Scroll-triggered fade-in wrapper
     Nav.astro           # Fixed nav, goes frosted glass on scroll
+    widgets/            # Custom elements usable inside blog markdown
+      subnet-calc.ts    # <subnet-calc> interactive subnet calculator
   content/
     projects/           # One .md file per project
+    blog/               # One .md file per blog post
+  lib/
+    blog.ts             # getPosts() (hides drafts in production) + formatDate()
   layouts/
     Layout.astro        # Shell for every page — nav, footer, keyboard shortcuts
   pages/
@@ -38,6 +43,9 @@ src/
     contact.astro       # GitHub link + copy-to-clipboard email
     projects/
       [slug].astro      # Dynamic project detail page
+    blog.astro          # All published posts, newest first
+    blog/
+      [slug].astro      # Dynamic blog post page
   styles/
     global.css          # Tailwind imports + typography plugin
 ```
@@ -65,6 +73,34 @@ lastUpdated: 2026-01-01  # required, YYYY-MM-DD unquoted
 ## What's next
 ```
 
+## Adding a blog post
+
+Create `src/content/blog/my-post.md` — filename becomes the URL slug:
+
+```markdown
+---
+title: "Post Title"
+description: "One line description"
+tags: ["networking"]
+pubDate: 2026-01-01  # required, YYYY-MM-DD unquoted
+draft: true          # visible in `npm run dev`, excluded from the production build
+---
+```
+
+Remove `draft` (or set it to `false`) to publish.
+
+Published posts also appear on the homepage (latest three) and in the terminal's `ls blog`.
+
+Widgets are custom elements, so they work in plain markdown. Embed the subnet calculator with:
+
+```html
+<subnet-calc ip="192.168.1.181" prefix="24"></subnet-calc>
+```
+
+New widgets go in `src/components/widgets/` and must be imported in the `<script>` of `src/pages/blog/[slug].astro`.
+
+Never publish real public IPv4 addresses, real IPv6 addresses, or MAC addresses in a post. Private IPv4 ranges are fine; use `2001:db8::/32` for IPv6 examples.
+
 ## Adding terminal commands
 
 Edit the `COMMANDS` object in `src/components/Terminal.tsx`. Each command returns an array of HTML strings.
@@ -79,7 +115,7 @@ Edit the `COMMANDS` object in `src/components/Terminal.tsx`. Each command return
 
 ## Keyboard shortcuts
 
-Press `g` then: `h` home · `p` projects · `a` about · `c` contact
+Press `g` then: `h` home · `p` projects · `b` blog · `a` about · `c` contact
 
 ## TODO
 

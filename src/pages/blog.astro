@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FadeIn from '../components/FadeIn.astro';
+import { getPosts, formatDate } from '../lib/blog';
+
+const posts = await getPosts();
+---
+
+<Layout title="Blog" description="Notes from learning networking, Azure, Bash and system design by doing.">
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <p class="font-mono text-sm text-zinc-500 mb-2">What I've been learning</p>
+    <h1 class="text-3xl font-bold text-zinc-100 mb-10">Blog</h1>
+
+    {posts.length === 0 && (
+      <p class="font-mono text-sm text-zinc-500">$ ls blog/ <span class="text-zinc-600">— first post on its way</span></p>
+    )}
+
+    <div class="grid gap-4">
+      {posts.map((post, i) => (
+        <FadeIn delay={i * 100}>
+          <a
+            href={`/blog/${post.id}`}
+            class="group block border border-zinc-800 rounded-lg p-6 transition-all duration-300 hover:border-zinc-500 hover:shadow-[0_0_30px_-5px_rgba(161,161,170,0.15)] hover:-translate-y-0.5"
+          >
+            <div class="flex items-start justify-between mb-3">
+              <h2 class="font-semibold text-zinc-100 group-hover:text-white transition-colors">{post.data.title}</h2>
+              {post.data.draft && (
+                <span class="text-xs px-2 py-0.5 rounded font-mono shrink-0 ml-3 bg-yellow-900 text-yellow-300">Draft</span>
+              )}
+            </div>
+            <p class="text-zinc-400 text-sm mb-4">{post.data.description}</p>
+            <div class="flex gap-2 flex-wrap">
+              {post.data.tags.map((tag: string) => (
+                <span class="text-xs font-mono text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded">{tag}</span>
+              ))}
+            </div>
+            <p class="font-mono text-xs text-zinc-600 mt-3">{formatDate(post.data.pubDate)}</p>
+          </a>
+        </FadeIn>
+      ))}
+    </div>
+  </section>
+</Layout>

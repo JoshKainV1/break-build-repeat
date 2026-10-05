@@ -16,6 +16,7 @@ const COMMANDS: Record<string, () => string[]> = {
   help: () => [
     '  Available commands:',
     '  <span class="text-green-400">ls projects</span>       list all projects',
+    '  <span class="text-green-400">ls blog</span>           list blog posts',
     '  <span class="text-green-400">cat about.md</span>      who is josh kain',
     '  <span class="text-green-400">cat skills.md</span>     tech stack',
     '  <span class="text-green-400">homelab</span>           lab status',
@@ -83,7 +84,17 @@ const BOOT_LINES = [
 
 type Line = { html: string; isCommand?: boolean };
 
-export default function Terminal() {
+interface Post {
+  id: string;
+  title: string;
+  date: string;
+}
+
+interface Props {
+  posts?: Post[];
+}
+
+export default function Terminal({ posts = [] }: Props) {
   const [lines, setLines] = useState<Line[]>(BOOT_LINES.map(html => ({ html })));
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -94,6 +105,19 @@ export default function Terminal() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [lines]);
+
+  const commands: Record<string, () => string[]> = {
+    ...COMMANDS,
+    'ls blog': () =>
+      posts.length === 0
+        ? ['total 0', '<span class="text-zinc-500">First post on its way.</span>']
+        : [
+            'total ' + posts.length,
+            ...posts.map(p =>
+              `<span class="text-zinc-500">${p.date}</span>  <a href="/blog/${p.id}" class="underline text-zinc-300 hover:text-white">${p.title}</a>`
+            ),
+          ],
+  };
 
   const run = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();
@@ -106,7 +130,7 @@ export default function Terminal() {
       return;
     }
 
-    const output = COMMANDS[trimmed];
+    const output = commands[trimmed];
     if (output) {
       newLines.push(...output().map(html => ({ html })));
     } else if (trimmed === '') {

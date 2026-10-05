@@ -2,6 +2,7 @@
 const links = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -19,9 +20,9 @@ const current = Astro.url.pathname;
         <circle cx="31" cy="36.5" r="9.5" fill="none" stroke="#e4e4e7" stroke-width="7"/>
         <circle cx="49" cy="42" r="5.5" fill="#4ade80"/>
       </svg>
-      break.build.repeat
+      <span class="hidden sm:inline">break.build.repeat</span>
     </a>
-    <ul class="flex gap-6">
+    <ul class="flex gap-4 sm:gap-6">
       {links.map(link => (
         <li>
           <a

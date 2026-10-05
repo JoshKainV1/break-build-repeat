@@ -27,7 +27,7 @@ const { title, description = "Josh Kain — breaking things, building things, re
     </main>
     <Footer />
 
-    <!-- Keyboard shortcuts: G+H home, G+P projects, G+A about, G+C contact -->
+    <!-- Keyboard shortcuts: G+H home, G+P projects, G+B blog, G+A about, G+C contact -->
     <div id="shortcut-toast" class="fixed bottom-6 right-6 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 font-mono text-xs text-zinc-300 opacity-0 transition-opacity duration-300 pointer-events-none z-50">
       <span id="shortcut-text"></span>
     </div>
@@ -39,7 +39,7 @@ const { title, description = "Josh Kain — breaking things, building things, re
       const toastText = document.getElementById('shortcut-text');
 
       const routes: Record<string, string> = {
-        h: '/', p: '/projects', a: '/about', c: '/contact',
+        h: '/', p: '/projects', b: '/blog', a: '/about', c: '/contact',
       };
 
       const showToast = (msg: string) => {
@@ -55,7 +55,7 @@ const { title, description = "Josh Kain — breaking things, building things, re
 
         if (key === 'g') {
           firstKey = 'g';
-          showToast('g — then h/p/a/c to navigate');
+          showToast('g — then h/p/b/a/c to navigate');
           timer = setTimeout(() => { firstKey = ''; }, 2000);
           return;
         }
