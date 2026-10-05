@@ -3,7 +3,6 @@ title: "Really understanding IPv4 and IPv6"
 description: "I knew what a subnet was. I didn't know what it was for. An evening with ipconfig and some binary sorted that out."
 tags: ["networking", "IPv4", "IPv6", "subnetting"]
 pubDate: 2026-10-05
-draft: true
 ---
 
 I've typed `ipconfig` thousands of times. I look at the IP address, ignore the two lines underneath it, and get on with my day.
