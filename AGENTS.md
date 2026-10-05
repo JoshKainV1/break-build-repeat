@@ -44,6 +44,7 @@ src/
     projects/
       [slug].astro      # Dynamic project detail page
     blog.astro          # All published posts, newest first
+    rss.xml.ts          # RSS feed of published posts, full content
     blog/
       [slug].astro      # Dynamic blog post page
   styles/
@@ -89,7 +90,7 @@ draft: true          # visible in `npm run dev`, excluded from the production bu
 
 Remove `draft` (or set it to `false`) to publish.
 
-Published posts also appear on the homepage (latest three) and in the terminal's `ls blog`.
+Published posts also appear on the homepage (latest three), in the terminal's `ls blog`, and in the RSS feed at `/rss.xml`.
 
 Widgets are custom elements, so they work in plain markdown. Embed the subnet calculator with:
 

@@ -16,7 +16,7 @@ Needed a portfolio that reflected how I actually work — not a polished brochur
 
 Static site built with Astro for performance, React for interactive components, Tailwind for styling. Deployed to Cloudflare Pages for global CDN and zero cost.
 
-It now has a [blog](/blog) too: short posts on whatever I'm learning, three a week, on the theory that if I can't explain it I don't know it. Posts are plain markdown in their own content collection. Interactive pieces, like the subnet calculator in the first post, are custom elements, so they drop straight into a post with no extra tooling.
+It now has a [blog](/blog) too: short posts on whatever I'm learning, three a week, on the theory that if I can't explain it I don't know it. Posts are plain markdown in their own content collection. Interactive pieces, like the subnet calculator in the first post, are custom elements, so they drop straight into a post with no extra tooling. There's an [RSS feed](/rss.xml) for anyone who wants to follow along.
 
 ## Stack
 
@@ -38,7 +38,6 @@ A committed `package-lock.json` (generated on Windows) pinned platform-specific 
 
 ## What's next
 
-- RSS feed for the blog
 - Homelab/hardware photos and app screenshots on the familyHub project page
 - Expandable career timeline on the About page
 - Skill/tech radar interactive diagram
