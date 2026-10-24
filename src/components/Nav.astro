@@ -1,16 +1,19 @@
 ---
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/', label: 'Home', key: 'h' },
+  { href: '/projects', label: 'Projects', key: 'p' },
+  { href: '/blog', label: 'Blog', key: 'b' },
+  { href: '/radar', label: 'Radar', key: 'r' },
+  { href: '/about', label: 'About', key: 'a' },
+  { href: '/contact', label: 'Contact', key: 'c' },
 ];
 
-const current = Astro.url.pathname;
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`);
 ---
 
-<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300">
+<nav id="main-nav" class="group/nav fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300">
   <div class="max-w-4xl mx-auto flex items-center justify-between">
     <a href="/" class="flex items-center gap-2.5 font-mono text-sm font-bold tracking-widest text-zinc-100">
       <svg viewBox="0 0 64 64" class="w-5 h-5 shrink-0" aria-hidden="true">
@@ -18,36 +21,213 @@ const current = Astro.url.pathname;
         <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#27272a" stroke-width="3"/>
         <path d="M22 15 L22 46" fill="none" stroke="#e4e4e7" stroke-width="7" stroke-linecap="round"/>
         <circle cx="31" cy="36.5" r="9.5" fill="none" stroke="#e4e4e7" stroke-width="7"/>
-        <circle cx="49" cy="42" r="5.5" fill="#4ade80"/>
+        <circle id="nav-led" cx="49" cy="42" r="5.5" fill="#4ade80"/>
       </svg>
-      <span class="hidden sm:inline">break.build.repeat</span>
+      <span>break.build.repeat</span>
     </a>
-    <ul class="flex gap-4 sm:gap-6">
+
+    <!-- Desktop links -->
+    <ul id="nav-links" class="relative hidden md:flex items-center gap-1">
+      <span
+        id="nav-indicator"
+        aria-hidden="true"
+        class="absolute top-0 left-0 h-full rounded-md border border-zinc-800 bg-zinc-900/80 opacity-0 pointer-events-none"
+      >
+        <span class="absolute left-3 right-3 -bottom-px h-px bg-green-400 shadow-[0_0_8px_1px_rgba(74,222,128,0.6)]"></span>
+      </span>
       {links.map(link => (
-        <li>
+        <li class="relative">
           <a
             href={link.href}
-            class={`text-sm transition-colors hover:text-white ${current === link.href ? 'text-white' : 'text-zinc-400'}`}
+            data-active={isActive(link.href) ? 'true' : undefined}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class={`relative z-10 block px-3 py-1.5 text-sm transition-colors hover:text-white focus-visible:text-white ${isActive(link.href) ? 'text-white' : 'text-zinc-400'}`}
           >
+            {link.label}
+          </a>
+          <kbd
+            aria-hidden="true"
+            class="pointer-events-none absolute -top-2 right-0 z-20 rounded border border-green-400/40 bg-zinc-950 px-1 font-mono text-[10px] leading-4 text-green-400 opacity-0 translate-y-1 transition-all duration-200 group-[.show-keys]/nav:opacity-100 group-[.show-keys]/nav:translate-y-0"
+          >
+            {link.key}
+          </kbd>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Mobile toggle -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="md:hidden -mr-2 p-2 text-zinc-400 hover:text-white transition-colors"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
+      <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path id="nav-bar-top" d="M4 7h16" class="origin-center transition-all duration-300"></path>
+        <path id="nav-bar-mid" d="M4 12h16" class="origin-center transition-all duration-300"></path>
+        <path id="nav-bar-bot" d="M4 17h16" class="origin-center transition-all duration-300"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="nav-menu" inert>
+    <ul class="max-w-4xl mx-auto border-t border-zinc-800 mt-3 pt-3 space-y-1">
+      {links.map((link, i) => (
+        <li style={`--i:${i}`}>
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class={`flex items-center gap-3 py-2 text-sm font-mono transition-colors hover:text-white ${isActive(link.href) ? 'text-white' : 'text-zinc-400'}`}
+          >
+            <span class={`w-1.5 h-1.5 rounded-full ${isActive(link.href) ? 'bg-green-400 shadow-[0_0_8px_1px_rgba(74,222,128,0.6)]' : 'bg-zinc-700'}`}></span>
             {link.label}
           </a>
         </li>
       ))}
     </ul>
   </div>
+
+  <!-- Scroll progress -->
+  <div
+    id="nav-progress"
+    aria-hidden="true"
+    class="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-green-400/70"
+  ></div>
 </nav>
+
+<style>
+  #nav-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms ease;
+  }
+  #nav-menu.open {
+    grid-template-rows: 1fr;
+  }
+  #nav-menu > ul {
+    min-height: 0;
+    overflow: hidden;
+  }
+  #nav-menu li {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 300ms ease, transform 300ms ease;
+    transition-delay: 0ms;
+  }
+  #nav-menu.open li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i) * 40ms + 80ms);
+  }
+  #nav-indicator {
+    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1), width 350ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+  }
+  #nav-led {
+    animation: nav-led 3s ease-in-out infinite;
+  }
+  @keyframes nav-led {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+  @media (min-width: 768px) {
+    #nav-menu { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #nav-menu, #nav-menu li, #nav-indicator { transition: none; }
+    #nav-led { animation: none; }
+  }
+</style>
 
 <script>
   const nav = document.getElementById('main-nav');
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  const progress = document.getElementById('nav-progress');
+  const list = document.getElementById('nav-links');
+  const indicator = document.getElementById('nav-indicator');
+  const bg = ['bg-zinc-950/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800'];
+
+  const isOpen = () => toggle?.getAttribute('aria-expanded') === 'true';
 
   const update = () => {
-    if (window.scrollY > 20) {
-      nav?.classList.add('bg-zinc-950/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800');
-    } else {
-      nav?.classList.remove('bg-zinc-950/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800');
+    const scrolled = window.scrollY > 20;
+    if (scrolled || isOpen()) nav?.classList.add(...bg);
+    else nav?.classList.remove(...bg);
+
+    if (progress) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = scrolled && max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      progress.style.transform = `scaleX(${ratio})`;
     }
   };
 
+  // Mobile menu
+  const setOpen = (open: boolean) => {
+    toggle?.setAttribute('aria-expanded', String(open));
+    menu?.classList.toggle('open', open);
+    if (menu) menu.inert = !open;
+    // burger -> cross
+    const top = document.getElementById('nav-bar-top');
+    const mid = document.getElementById('nav-bar-mid');
+    const bot = document.getElementById('nav-bar-bot');
+    top?.setAttribute('style', open ? 'transform: translateY(5px) rotate(45deg)' : '');
+    bot?.setAttribute('style', open ? 'transform: translateY(-5px) rotate(-45deg)' : '');
+    mid?.setAttribute('style', open ? 'opacity: 0; transform: scaleX(0)' : '');
+    update();
+  };
+
+  toggle?.addEventListener('click', () => setOpen(!isOpen()));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) setOpen(false); });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+
+  // Gliding indicator: follows hover/focus, rests on the active page
+  if (list && indicator) {
+    const links = Array.from(list.querySelectorAll<HTMLAnchorElement>('a'));
+    const active = links.find(a => a.dataset.active === 'true') ?? null;
+    let placed = false;
+
+    const moveTo = (a: HTMLAnchorElement | null) => {
+      if (!a) { indicator.style.opacity = '0'; return; }
+      const li = a.parentElement as HTMLElement;
+      if (!placed) {
+        const prev = indicator.style.transition;
+        indicator.style.transition = 'none';
+        indicator.style.transform = `translateX(${li.offsetLeft}px)`;
+        indicator.style.width = `${li.offsetWidth}px`;
+        indicator.offsetWidth; // flush
+        indicator.style.transition = prev;
+        placed = true;
+      } else {
+        indicator.style.transform = `translateX(${li.offsetLeft}px)`;
+        indicator.style.width = `${li.offsetWidth}px`;
+      }
+      indicator.style.opacity = '1';
+    };
+
+    links.forEach(a => {
+      a.addEventListener('mouseenter', () => moveTo(a));
+      a.addEventListener('focus', () => moveTo(a));
+    });
+    list.addEventListener('mouseleave', () => moveTo(active));
+    list.addEventListener('focusout', () => moveTo(active));
+    window.addEventListener('resize', () => { placed = false; moveTo(active); });
+    moveTo(active);
+  }
+
+  // Show shortcut keys on the links after pressing g
+  let keysTimer: ReturnType<typeof setTimeout>;
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() !== 'g' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) return;
+    nav?.classList.add('show-keys');
+    clearTimeout(keysTimer);
+    keysTimer = setTimeout(() => nav?.classList.remove('show-keys'), 2000);
+  });
+
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
   update();
 </script>
