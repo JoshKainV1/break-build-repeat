@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FadeIn from '../components/FadeIn.astro';
+import TechRack from '../components/TechRack.tsx';
+---
+
+<Layout title="Radar">
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <FadeIn>
+      <p class="font-mono text-sm text-zinc-500 mb-2">What's powered on</p>
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Tech radar</h1>
+      <p class="text-zinc-400 leading-relaxed mb-10 max-w-2xl">
+        Everything I use or am learning, racked up. The LED shows the ring. Re-sort it, or click a unit to pull it out.
+      </p>
+    </FadeIn>
+    <TechRack client:load />
+  </section>
+</Layout>

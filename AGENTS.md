@@ -13,7 +13,7 @@ npm run preview   # preview production build
 ## Stack
 
 - **Astro 7** — static site generator, file-based routing
-- **React** — interactive components (Terminal, ProjectFilter)
+- **React** — interactive components (Terminal, ProjectFilter, TechRack)
 - **Tailwind CSS v4** — utility-first styling, `@tailwindcss/typography` installed
 - **TypeScript** — strict mode
 - **Cloudflare Pages** — deployed at [break-build-repeat.uk](https://break-build-repeat.uk), auto-deploys on push to `master`
@@ -25,6 +25,7 @@ src/
   components/           # Astro + React components
     Terminal.tsx        # Interactive terminal on homepage
     ProjectFilter.tsx   # Live search + filter on projects page
+    TechRack.tsx        # Tech radar: rack view and topology view of the same units
     FadeIn.astro        # Scroll-triggered fade-in wrapper
     Nav.astro           # Fixed nav, goes frosted glass on scroll
     widgets/            # Custom elements usable inside blog markdown
@@ -33,6 +34,7 @@ src/
     projects/           # One .md file per project
     blog/               # One .md file per blog post
   lib/
+    radar.ts            # Radar data: TECH (ring, stack, notes), TOPO positions, EDGES
     blog.ts             # getPosts() (hides drafts in production) + formatDate()
   layouts/
     Layout.astro        # Shell for every page — nav, footer, keyboard shortcuts
@@ -40,6 +42,7 @@ src/
     index.astro         # Homepage — hero + terminal + featured projects
     projects.astro      # All projects with live filter/search
     about.astro         # Bio + experience
+    radar.astro         # Tech radar page
     contact.astro       # GitHub link + copy-to-clipboard email
     projects/
       [slug].astro      # Dynamic project detail page
@@ -102,6 +105,14 @@ New widgets go in `src/components/widgets/` and must be imported in the `<script
 
 Never publish real public IPv4 addresses, real IPv6 addresses, or MAC addresses in a post. Private IPv4 ranges are fine; use `2001:db8::/32` for IPv6 examples.
 
+## Tech radar
+
+`/radar` renders `TechRack.tsx` from the data in `src/lib/radar.ts`. Each tech is a 1U unit whose LED colour is its ring (adopt green, trial amber, assess blue, hold grey). A toggle morphs the same units between a rack list (sortable by ring, stack or a–z) and a network topology.
+
+- Add or move a tech: edit `TECH` (ring, stack, note, project slugs from `src/content/projects/`).
+- Every tech also needs an entry in `TOPO` (centre x as a %, row index 0–6) and, if it connects to anything, entries in `EDGES`.
+- Motion respects `prefers-reduced-motion` via the `.rack-anim` class in `global.css`.
+
 ## Adding terminal commands
 
 Edit the `COMMANDS` object in `src/components/Terminal.tsx`. Each command returns an array of HTML strings.
@@ -116,7 +127,7 @@ Edit the `COMMANDS` object in `src/components/Terminal.tsx`. Each command return
 
 ## Keyboard shortcuts
 
-Press `g` then: `h` home · `p` projects · `b` blog · `a` about · `c` contact
+Press `g` then: `h` home · `p` projects · `b` blog · `r` radar · `a` about · `c` contact
 
 ## TODO
 

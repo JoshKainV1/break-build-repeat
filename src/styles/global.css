@@ -1,2 +1,27 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@keyframes rack-blink {
+  0%, 45% { opacity: 1; }
+  50%, 100% { opacity: 0.15; }
+}
+
+@keyframes rack-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes rack-scan {
+  0% { transform: translateY(-10%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(110%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rack-anim { animation: none !important; transition: none !important; }
+}
+
+@keyframes rack-flow {
+  to { stroke-dashoffset: -20; }
+}
