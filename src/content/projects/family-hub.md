@@ -4,7 +4,7 @@ description: "A self-hosted home platform — media server, family dashboard, an
 tags: ["homelab", "self-hosted", "Docker", "C#", "React", "PostgreSQL", "OPNsense", "TrueNAS"]
 status: wip
 featured: true
-lastUpdated: 2026-10-05
+lastUpdated: 2026-11-25
 ---
 
 ## The problem
@@ -19,22 +19,28 @@ The app itself covers movie/TV streaming with seekable playback, real-time famil
 
 ## Infrastructure
 
-The network is segmented into four VLANs, managed by an OPNsense firewall on an N150 fanless appliance:
+The network is segmented into seven VLANs, managed by an OPNsense firewall on a CWWK S5 (i5-1135G7, four Intel i226-V 2.5GbE ports):
 
-- **VLAN 10 (MGMT)** — firewall UI, switch UI, admin only
-- **VLAN 20 (SERVERS)** — TrueNAS NAS, application host, all services
-- **VLAN 30 (CAMERAS)** — future CCTV, fully isolated from everything else
-- **VLAN 40 (GUEST/IoT)** — TVs, tablets, smart devices, limited access
+- **VLAN 10 (MGMT)** — switch, access point and Proxmox admin pages
+- **VLAN 20 (SERVERS)** — TrueNAS NAS, application host, my PC and every service
+- **VLAN 30 (CAMERAS)** — future CCTV, no internet access
+- **VLAN 40 (IOT)** — Home Assistant, TVs, smart devices
+- **VLAN 50 (GUEST)** — visitors, internet only
+- **VLAN 60 (TRUSTED)** — family phones and laptops
+- **VLAN 70 (WORK)** — a work device, internet only, nothing else reachable
 
-Traffic between VLANs is controlled by explicit firewall rules. CAMERAS can't reach SERVERS. GUEST can reach Plex but nothing else. Nothing reaches MGMT except admin devices.
+Traffic between VLANs is controlled by explicit, default-deny firewall rules. CAMERAS can't reach anything. GUEST and WORK get the internet and nothing else. Nothing reaches MGMT except my PC.
 
-For now the OPNsense box sits behind my existing home router while I test it. The VLANs are up and running, but services like the NAS still need moving onto them.
+The PC and NAS share a VLAN on purpose. A managed layer 2 switch can't route between VLANs, so traffic between two VLANs would go up to the firewall and back at 2.5GbE. In one VLAN it stays on the switch at full speed.
+
+OPNsense 26.7 is installed on the S5 and the design is written up, but nothing is plugged in yet. The house still runs on the Vodafone router until the cutover.
 
 ## Stack
 
-- **OPNsense (N150 fanless)** — gateway, firewall, DHCP, DNS (Unbound), IDS/IPS (Suricata), WireGuard VPN
-- **TrueNAS SCALE (Ryzen 5 5600G, 32GB RAM)** — striped ZFS pools over SAS via LSI HBA, with nightly replication to a backup pool instead of mirrored redundancy
-- **GoLake 2.5GbE managed switch** — VLAN tagging and trunking
+- **OPNsense on a CWWK S5 (i5-1135G7, 16GB RAM, 256GB NVMe, ZFS)** — gateway, firewall, DHCP, DNS (Unbound), IDS (Suricata, alert-only), WireGuard VPN
+- **TrueNAS SCALE (Ryzen 7 4750G, 32GB RAM)** — striped ZFS pools over SAS via an HBA, with nightly replication to a backup pool instead of mirrored redundancy
+- **Netgear MS308E (8× 2.5GbE, 802.1Q)** — VLAN tagging and trunking, planned. It replaces the unmanaged GoLake switch
+- **UniFi U7 Pro and a small PoE switch** — VLAN-aware Wi-Fi (TRUSTED, IOT and GUEST SSIDs) and power for the cameras, planned
 - **GMKtec K12 (Ryzen 7 H 255, 32GB RAM, Radeon 780M)** — Proxmox VE host running the app stack in a Docker VM alongside Home Assistant
 - **C# ASP.NET Core 8** — REST API backend
 - **React 19 + Vite** — frontend
@@ -53,6 +59,8 @@ For now the OPNsense box sits behind my existing home router while I test it. Th
 - The difference between IDS (monitoring) and IPS (blocking) and why you start with one before the other
 - How GPU passthrough to Docker works for hardware-accelerated transcoding
 - Why firewall rules need to be explicit and default-deny — and what happens when they're not
+- The difference between a layer 2 and a layer 3 switch, and why traffic between VLANs has to pass through the firewall
+- How to health-check a used NVMe drive from the OPNsense shell with `nvmecontrol`
 
 ## What broke
 
@@ -60,11 +68,14 @@ For now the OPNsense box sits behind my existing home router while I test it. Th
 - VLAN trunk misconfiguration on the switch caused the entire network to drop — learned to always verify trunk ports before applying VLAN rules
 - NFS mount permissions between TrueNAS datasets and Docker volumes required careful UID/GID alignment
 - GPU transcoding required `nvidia-docker2` runtime configuration that isn't obvious from the standard Docker docs
+- The S5 dropped me into the UEFI shell on the first boot from the install stick, and `nvmecontrol` was "not recognised". That wording comes from the UEFI shell, not FreeBSD
+- OPNsense's default LAN address, 192.168.1.1, is the same as my Vodafone router, so the LAN has to change before anything is plugged in
 
 ## What's next
 
+- Assign the S5's ports, set up the rescue network, then build the VLANs, switch and firewall rules on the bench before the cutover
+- Finish the TrueNAS box: flash the BIOS for the 4750G, fit the HBA and 2.5GbE NIC, and install TrueNAS on the boot SSD before the SAS drives go in
 - Start linking services to the VLANs, beginning with the NAS
-- TrueNAS is built and running, but not finished: the current PSU is going to be swapped for a more efficient 500W 80 Plus Gold unit, the 2.5GbE NIC is sourced and still needs fitting, and the airflow needs improving before I'm happy with it
 - Phase 2: CCTV system on VLAN 30 using Frigate NVR and WD Purple drives
 - Phase 3: migrate the app stack from Docker Compose to a self-hosted 3-node k3s cluster on Proxmox — MetalLB for bare-metal load balancing, TrueNAS-backed persistent volumes, and Argo CD for GitOps deploys (see [Homelab Kubernetes](/projects/homelab-kubernetes))
 - WireGuard VPN for remote family access
