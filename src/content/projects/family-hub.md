@@ -33,7 +33,7 @@ Traffic between VLANs is controlled by explicit, default-deny firewall rules. CA
 
 The PC and NAS share a VLAN on purpose. A managed layer 2 switch can't route between VLANs, so traffic between two VLANs would go up to the firewall and back at 2.5GbE. In one VLAN it stays on the switch at full speed.
 
-OPNsense 26.7 is installed on the S5 and the design is written up, but nothing is plugged in yet. The house still runs on the Vodafone router until the cutover.
+OPNsense 26.7 is installed on the S5 and the design is written up, but nothing is plugged in yet. The house still runs on the Vodafone router until the cutover. I wrote more about the design in [Planning a VLAN network before I plug anything in](/blog/planning-vlans-opnsense-s5).
 
 ## Stack
 
