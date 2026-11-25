@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 const projects = [
   { name: 'onboard', status: 'wip', tags: ['C#', '.NET', 'React', 'PostgreSQL'] },
@@ -82,6 +82,11 @@ const BOOT_LINES = [
   '',
 ];
 
+const bootLines = (): Line[] => BOOT_LINES.map(html => ({ html }));
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 type Line = { html: string; isCommand?: boolean };
 
 interface Post {
@@ -95,7 +100,7 @@ interface Props {
 }
 
 export default function Terminal({ posts = [] }: Props) {
-  const [lines, setLines] = useState<Line[]>(BOOT_LINES.map(html => ({ html })));
+  const [lines, setLines] = useState<Line[]>(bootLines);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -106,27 +111,30 @@ export default function Terminal({ posts = [] }: Props) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [lines]);
 
-  const commands: Record<string, () => string[]> = {
-    ...COMMANDS,
-    'ls blog': () =>
-      posts.length === 0
-        ? ['total 0', '<span class="text-zinc-500">First post on its way.</span>']
-        : [
-            'total ' + posts.length,
-            ...posts.map(p =>
-              `<span class="text-zinc-500">${p.date}</span>  <a href="/blog/${p.id}" class="underline text-zinc-300 hover:text-white">${p.title}</a>`
-            ),
-          ],
-  };
+  const commands = useMemo<Record<string, () => string[]>>(
+    () => ({
+      ...COMMANDS,
+      'ls blog': () =>
+        posts.length === 0
+          ? ['total 0', '<span class="text-zinc-500">First post on its way.</span>']
+          : [
+              'total ' + posts.length,
+              ...posts.map(p =>
+                `<span class="text-zinc-500">${p.date}</span>  <a href="/blog/${p.id}" class="underline text-zinc-300 hover:text-white">${p.title}</a>`
+              ),
+            ],
+    }),
+    [posts],
+  );
 
   const run = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();
     const newLines: Line[] = [
-      { html: `<span class="text-zinc-500">$</span> ${cmd}`, isCommand: true },
+      { html: `<span class="text-zinc-500">$</span> ${escapeHtml(cmd)}`, isCommand: true },
     ];
 
     if (trimmed === 'clear') {
-      setLines(BOOT_LINES.map(html => ({ html })));
+      setLines(bootLines());
       return;
     }
 
@@ -136,7 +144,7 @@ export default function Terminal({ posts = [] }: Props) {
     } else if (trimmed === '') {
       // do nothing
     } else {
-      newLines.push({ html: `<span class="text-red-400">command not found: ${cmd}</span>  (try <span class="text-green-400">help</span>)` });
+      newLines.push({ html: `<span class="text-red-400">command not found: ${escapeHtml(cmd)}</span>  (try <span class="text-green-400">help</span>)` });
     }
 
     setLines(prev => [...prev, ...newLines]);
