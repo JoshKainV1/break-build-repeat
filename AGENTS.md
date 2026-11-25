@@ -4,7 +4,7 @@ Portfolio site for Josh Kain — Systems Engineer, tinkerer, homelab enthusiast.
 
 ## Development
 
-```powershell
+```bash
 npm run dev       # start dev server at localhost:4321
 npm run build     # production build
 npm run preview   # preview production build
@@ -136,7 +136,7 @@ Press `g` then: `h` home · `p` projects · `b` blog · `r` radar · `a` about �
 - [ ] Add screenshots of familyHub app running
 - [x] Connect repo to Cloudflare Pages for deployment
 - [ ] Add expandable career timeline to About page
-- [ ] Add skill/tech radar interactive diagram
+- [x] Add skill/tech radar interactive diagram
 - [x] Add LinkedIn link to Contact page
 - [ ] Add more projects as they're built
 - [x] Custom domain setup on Cloudflare Pages
